@@ -10,8 +10,7 @@
 		}
 	],
 	"require": {
-		"aws/aws-sdk-php": "~3.14",
-		"ralouphie/mimey":
+		"aws/aws-sdk-php": "~3.14"
 	},
 	"autoload": {
 		"psr-0": {
