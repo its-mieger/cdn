@@ -1,0 +1,24 @@
+{
+	"root-dir": "webroot",
+	"adapters": {
+		"Mock": "CDNTest\\Mock\\CdnAdapterMock"
+	},
+	"default-config": {
+		"adapter": "Mock",
+		"aws": {
+			"region": "eu-west-1",
+			"credentials": {
+				"key": "",
+				"secret": ""
+			}
+		},
+		"bucket": "test-bucket",
+		"url": "test.test.de"
+	},
+	"paths": {
+		"img": true,
+		"css": {
+			"appendHash": true
+		}
+	}
+}

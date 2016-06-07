@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+
+	if (PHP_SAPI !== 'cli') {
+		echo 'Warning: cdn should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
+	}
+
+	// autoloader
+	if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+		require_once __DIR__ . '/vendor/autoload.php';
+	}
+	elseif (file_exists(__DIR__ . '/../../autoload.php')) {
+		require_once __DIR__ . '/../../autoload.php';
+	}
+	else {
+		throw new Exception('No autoloader found');
+	}
+
+
+	// get config file
+	if (!empty($argv[1])) {
+		$configFile = $argv[1];
+	}
+	else {
+		if (file_exists(__DIR__ . '/cdn.json'))
+			$configFile = __DIR__ . '/cdn.json';
+		elseif (file_exists(__DIR__ . '/../../cdn.json'))
+			$configFile = __DIR__ . '/../../cdn.json';
+		else
+			throw new Exception('CDN config file not found');
+	}
+
+
+	\CDN\Script\SyncScript::run($configFile);
+
+
+
