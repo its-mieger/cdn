@@ -81,9 +81,9 @@
 			$client    = $this->mockS3Client();
 
 			$adp = new S3Adapter($client, 'test-bucket', []);
-			$adp->setRootDir('root/dir/');
+			$adp->setTargetDir('root/dir/');
 
-			$this->assertEquals('root/dir', $adp->getRootDir());
+			$this->assertEquals('root/dir', $adp->getTargetDir());
 		}
 
 		public function testGetAdditionalMetaData() {
@@ -333,7 +333,7 @@
 			// publish file
 			$adp = new S3Adapter($client, 'test-bucket', ['test.test.de']);
 			$adp->setCacheControl('max-age=86400');
-			$adp->setRootDir('theRootDir');
+			$adp->setTargetDir('theRootDir');
 			$ret = $adp->pushFile('the/test/key.txt', $fileContent, 'text/text');
 
 			$this->assertEquals('the/test/key.txt', $ret->getRemoteFileName());

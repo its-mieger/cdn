@@ -14,7 +14,8 @@
 		/** @var IInventory */
 		protected $s3Client = null;
 		protected $bucket = null;
-		protected $rootDir = null;
+		protected $targetDir = null;
+		protected $prefix = null;
 		protected $appendHash = false;
 		protected $distributionURLs = [];
 		protected $cacheControl = null;
@@ -42,7 +43,8 @@
 			$client->setAppendHash(!empty($configArray['append-hash']))
 				->setCacheControl(!empty($configArray['cache-control']) ? $configArray['cache-control'] : null)
 				->setAdditionalMetaData(!empty($configArray['metadata']) ? $configArray['metadata'] : null)
-				->setRootDir(!empty($configArray['target-dir']) ? $configArray['target-dir'] : null);
+				->setTargetDir(!empty($configArray['target-dir']) ? $configArray['target-dir'] : null)
+				->setPrefix(!empty($configArray['key-prefix']) ? $configArray['key-prefix'] : null);
 
 			return $client;
 		}
@@ -133,20 +135,39 @@
 		}
 
 		/**
-		 * Gets the prefix for bucket keys
+		 * Gets the target directory
 		 * @return null|string The prefix
 		 */
-		public function getRootDir() {
-			return $this->rootDir;
+		public function getTargetDir() {
+			return $this->targetDir;
 		}
 
 		/**
-		 * Sets the root directory
+		 * Sets the target directory
 		 * @param null|string $rootDir The root directory
 		 * @return $this
 		 */
-		public function setRootDir($rootDir) {
-			$this->rootDir = Path::trimTrailingSlash($rootDir);
+		public function setTargetDir($rootDir) {
+			$this->targetDir = Path::trimTrailingSlash($rootDir);
+
+			return $this;
+		}
+
+		/**
+		 * Gets the key prefix
+		 * @return null|string The key prefix
+		 */
+		public function getPrefix() {
+			return $this->prefix;
+		}
+
+		/**
+		 * Sets the key prefix
+		 * @param null|string $prefix The key prefix
+		 * @return $this
+		 */
+		public function setPrefix($prefix) {
+			$this->prefix = $prefix;
 
 			return $this;
 		}
@@ -191,7 +212,7 @@
 			else
 				$relKey = $filename;
 
-			$key = ($this->rootDir ? $this->rootDir . '/' : '') . $relKey;
+			$key = ($this->prefix ? $this->prefix : '') . ($this->targetDir ? $this->targetDir . '/' : '') . $relKey;
 
 			$s3 = $this->getS3Client();
 
@@ -257,9 +278,12 @@
 				$s3->putObject($params);
 			}
 
+			$urlBase = $this->shuffleDistributionUrl($relKey);
+			$urlBase = str_replace('{{target-dir}}', $this->targetDir, $urlBase);
+
 			return new RemoteFile(
 				$relKey,
-				$this->shuffleDistributionUrl($relKey) . $relKey
+				$urlBase . $relKey
 			);
 		}
 

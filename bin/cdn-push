@@ -45,7 +45,15 @@
 	}
 
 
-	\CDN\Script\SyncScript::run($configFile);
+	try {
+		\CDN\Script\SyncScript::run($configFile);
+		echo "Successful";
+	}
+	catch (Exception $ex) {
+		echo "ERROR: " . $ex->getMessage();
+
+		throw $ex;
+	}
 
 
 

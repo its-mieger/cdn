@@ -66,6 +66,14 @@
 		}
 
 		/**
+		 * Gets if bypass is active.
+		 * @return bool True if bypass is active. Else false.
+		 */
+		public static function isBypassActive() {
+			return self::$bypassActive;
+		}
+
+		/**
 		 * Sets the default protocol
 		 * @param string $protocol The protocol to use (eg. "https")
 		 */
