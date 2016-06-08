@@ -9,6 +9,9 @@
 			"email": "christopher.mieger@its-mieger.de"
 		}
 	],
+	"bin": [
+		"bin/cdn-push"
+	],
 	"require": {
 		"aws/aws-sdk-php": "~3.14"
 	},

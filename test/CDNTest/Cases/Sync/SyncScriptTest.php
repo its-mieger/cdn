@@ -61,7 +61,7 @@
 					'bucket'     => 'test-bucket',
 					'url'        => 'test.test.de',
 					'target-dir' => 'css',
-					'appendHash' => true,
+					'append-hash' => true,
 				], $args);
 			});
 			CdnAdapterMock::append('pushFile', function ($filename, $content, $contentType, $forceUpdate) {

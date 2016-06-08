@@ -6,26 +6,40 @@
 	}
 
 	// autoloader
-	if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-		require_once __DIR__ . '/vendor/autoload.php';
-	}
-	elseif (file_exists(__DIR__ . '/../../autoload.php')) {
-		require_once __DIR__ . '/../../autoload.php';
+	if (!empty($argv[2])) {
+
+		$autoLoadFile = $argv[2];
+		if (substr($autoLoadFile, 0, 1) != '/')
+			$autoLoadFile = __DIR__ . '/' . $autoLoadFile;
+
+		if (!file_exists($autoLoadFile))
+			throw new Exception('Autoloader "' . $autoLoadFile . '" does not exist');
+
+		require_once $argv[2];
 	}
 	else {
-		throw new Exception('No autoloader found');
+		if (file_exists(__DIR__ . '/../../../autoload.php')) {
+			require_once __DIR__ . '/../../../autoload.php';
+		}
+		else {
+			throw new Exception('No autoloader found');
+		}
 	}
 
 
 	// get config file
 	if (!empty($argv[1])) {
 		$configFile = $argv[1];
+
+		if (substr($configFile, 0, 1) != '/')
+			$configFile = __DIR__ . '/' . $configFile;
+
+		if (!file_exists($configFile))
+			throw new Exception('CDN config file "' . $configFile . '" does not exist');
 	}
 	else {
-		if (file_exists(__DIR__ . '/cdn.json'))
-			$configFile = __DIR__ . '/cdn.json';
-		elseif (file_exists(__DIR__ . '/../../cdn.json'))
-			$configFile = __DIR__ . '/../../cdn.json';
+		if (file_exists(__DIR__ . '/../../../../cdn.json'))
+			$configFile = __DIR__ . '/../../../../cdn.json';
 		else
 			throw new Exception('CDN config file not found');
 	}

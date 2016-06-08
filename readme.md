@@ -38,7 +38,7 @@ Example:
     	"paths": {
     		"img": true,
     		"css": {
-    			"appendHash": true
+    			"append-hash": true
     		}
     	}
     }
